@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kế Hoạch">
+<meta name="theme-color" content="#f9f5ed">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Kế Hoạch</title>
+<style>
+:root{--paper:#f9f5ed;--card:#fff;--ink:#29292e;--muted:#8f8a80;--line:#e6ded1;--accent:#547361;--done:#549e70;--warn:#d66654;--amber:#e0a138}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;font-size:15px;-webkit-text-size-adjust:100%}
+button{font-family:inherit;cursor:pointer}
+.serif{font-family:"New York","Iowan Old Style",ui-serif,Georgia,serif;font-weight:600}
+header.top{position:sticky;top:0;z-index:5;background:var(--paper);padding:calc(env(safe-area-inset-top) + 6px) 12px 6px}
+.hbtn{border:0;background:none;color:var(--accent);font-size:15px;min-width:70px;height:36px;font-weight:600}
+main{padding:4px 16px calc(120px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:10}
+nav.tabs button{flex:1;border:0;background:none;padding:8px 0 6px;font-size:11px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button.on{color:var(--accent);font-weight:700}
+nav.tabs svg{width:25px;height:25px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.seg{display:flex;background:#ebe4d8;border-radius:10px;padding:2px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;padding:7px 0;border-radius:8px;font-size:14px;color:var(--ink)}
+.seg button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+.navh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;min-height:44px}
+.navh button{border:0;background:none;color:var(--accent);font-size:30px;width:44px;height:44px;line-height:1}
+.navh .t{text-align:center;flex:1}.navh .t b{display:block;font-size:21px}.navh .t small{color:var(--muted);font-size:12px}
+h3{font-size:19px;margin:0 0 10px}
+.row{display:flex;align-items:center;gap:10px}
+.sb{justify-content:space-between}
+.muted{color:var(--muted)}.small{font-size:12px}
+.strike{text-decoration:line-through;color:var(--muted)}
+.check{width:26px;height:26px;border-radius:50%;border:2px solid #b9b3a8;background:#fff;flex:none;display:flex;align-items:center;justify-content:center;padding:0}
+.check.on{background:var(--done);border-color:var(--done)}
+.check.on::after{content:"";width:7px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translate(0,-1px) rotate(45deg)}
+.plus{border:0;background:var(--accent);color:#fff;width:30px;height:30px;border-radius:50%;font-size:20px;line-height:1;padding:0}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0 4px}.bar i{display:block;height:100%;background:var(--done);border-radius:8px;transition:width .3s}
+.goal{align-items:flex-start;padding:9px 0;border-bottom:1px solid #f1ece3}.goal:last-child{border-bottom:0}
+.tiles{display:flex;gap:10px}.tile{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;text-align:center}
+.months{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.mtile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink);font-size:14px;min-width:0}
+.mtile.cur{border:2px solid var(--accent)}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .wh{text-align:center;font-size:12px;font-weight:700;color:var(--muted);padding-bottom:4px}
+.cal .d{min-height:54px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0 0;background:#fbf9f4;border:0;font-size:14px;color:var(--ink)}
+.cal .d .n{width:28px;height:28px;line-height:28px;border-radius:50%}
+.cal .d.today .n{background:var(--accent);color:#fff;font-weight:700}
+.dots{display:flex;gap:2px;height:6px}.dots i{width:5px;height:5px;border-radius:50%;display:block}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--muted)}.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+.week{display:flex;gap:6px;margin-bottom:14px}
+.week button{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink)}
+.week button b{font-size:17px}.week button.on{background:var(--accent);color:#fff;border-color:var(--accent)}.week button.td{border-color:var(--accent)}
+.wdot{width:5px;height:5px;border-radius:50%;display:block}
+.hour{display:flex;gap:10px;padding:3px 0}
+.hour .h{width:42px;font-size:12px;color:var(--muted);padding-top:9px;font-variant-numeric:tabular-nums;flex:none}
+.hour .slot{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.empty-slot{height:32px;border:0;background:none;position:relative;width:100%}
+.empty-slot::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line)}
+.chip{position:relative;padding:10px 10px 10px 14px;border-radius:12px;display:flex;gap:10px;align-items:center}
+.chip::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:4px;border-radius:2px;background:var(--c)}
+.badge{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;white-space:nowrap;flex:none}
+.banner{display:flex;gap:8px;align-items:center;background:rgba(214,102,84,.12);color:var(--warn);border-radius:12px;padding:12px;margin-bottom:14px;font-weight:600;border:0;width:100%;text-align:left;font-size:14px}
+.fab{position:fixed;right:18px;bottom:calc(74px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:32px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.22);z-index:9}
+.big{font-size:32px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.entry{display:flex;align-items:center;gap:12px;padding:7px 0}
+.ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.hbar{display:flex;align-items:center;gap:8px;margin:7px 0}.hbar .lb{width:96px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .tr{flex:1;height:20px}.hbar .tr i{display:block;height:100%;border-radius:5px;min-width:2px}.hbar .v{font-size:12px;color:var(--muted);min-width:46px;text-align:right}
+hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+svg.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart .grid{stroke:#eee8de;stroke-width:1}.chart text{font-size:10px;fill:var(--muted);font-family:inherit}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px}.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+#sheet-wrap{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:20;align-items:flex-end;justify-content:center}
+#sheet-wrap.show{display:flex}
+#sheet{background:var(--paper);width:100%;max-width:640px;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:18px 18px 0 0;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+.sheet-h{position:sticky;top:0;z-index:2;background:var(--paper);display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.sheet-h button{border:0;background:none;font-size:16px;color:var(--accent);min-width:56px}.sheet-h b{font-size:16px}
+.field{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;border:0;font-size:16px;background:none;color:var(--ink);font-family:inherit;outline:none;padding:2px 0;-webkit-appearance:none;appearance:none;min-height:24px}
+.field textarea{resize:none}
+.money-input{font-size:30px!important;font-weight:800}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px;padding:4px 0}
+.cats button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);padding:0}
+.cats .ic{width:46px;height:46px;font-size:21px}
+.cats button.on{color:var(--ink);font-weight:700}.cats button.on .ic{box-shadow:0 0 0 2.5px var(--accent)}
+.quick{display:flex;gap:8px;overflow-x:auto;margin-top:8px;padding-bottom:2px}
+.quick button{border:0;border-radius:20px;padding:7px 12px;background:rgba(84,115,97,.12);color:var(--accent);font-weight:700;font-size:12px;white-space:nowrap}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:13px;font-size:15px;font-weight:600;margin-bottom:10px;background:#fff;color:var(--accent);border:1px solid var(--line)}
+.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.danger{background:rgba(214,102,84,.1);color:var(--warn);border-color:transparent}
+.mini{border:0;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700}
+.tbl{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.tr3{display:grid;grid-template-columns:38% 24% 38%;border-top:1px solid var(--line)}
+.tr3>div{padding:9px 7px;min-width:0;word-break:break-word}
+.tr3>div+div{border-left:1px solid var(--line)}
+.th3{border-top:0;background:#f4efe6;font-size:12px;font-weight:800;color:var(--ink)}
+.th3>div{padding:9px 7px}
+.tr3 .tt{font-weight:600;font-size:14px;line-height:1.3}
+.tr3 .tm{font-size:11px;color:var(--muted);margin-top:3px}
+.stbtn{width:100%;border:0;border-radius:9px;padding:8px 2px;font-size:12px;font-weight:800;line-height:1.25}
+.mv{width:100%;border:0;background:none;color:var(--warn);font-size:11px;font-weight:700;margin-top:6px;padding:2px 0}
+.reason{width:100%;border:1px solid var(--line);border-radius:9px;padding:6px 7px;font-size:13px;font-family:inherit;color:var(--ink);background:#fcfaf6;resize:none;min-height:58px;outline:none;display:block}
+.reason.need{border-color:var(--warn);background:#fdf1ee}
+.reason:focus{border-color:var(--accent);background:#fff}
+.tadd{width:100%;border:0;border-top:1px dashed var(--line);background:none;padding:12px;color:var(--accent);font-weight:700;font-size:14px}
+.moods{display:flex;justify-content:space-between;gap:4px}
+.moods button{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:var(--muted)}
+.moods button span{font-size:26px;line-height:1.1}
+.moods button.on{border:2px solid var(--accent);background:#eef3ef;color:var(--ink);font-weight:700}
+.jt{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;font-family:inherit;line-height:1.5;color:var(--ink);background:#fcfaf6;resize:vertical;outline:none;display:block}
+.jt:focus{border-color:var(--accent);background:#fff}
+.saved{font-size:11px;color:var(--muted);text-align:right;margin-top:6px;min-height:14px}
+.lesson{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f1ece3}.lesson:last-child{border-bottom:0}
+.lesson .lt{flex:1;min-width:0;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:#eef3ef;color:var(--accent);margin-top:4px}
+.star{border:0;background:none;font-size:20px;padding:0 2px;line-height:1;color:#d4cbbd}.star.on{color:#e0a138}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 12px;font-size:13px;white-space:nowrap;color:var(--ink)}
+.chips button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:16px;background:#fff;margin-bottom:10px;outline:none;font-family:inherit}
+.addrow{display:flex;gap:8px;margin-top:10px}.addrow select{border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;padding:0 6px;max-width:120px}
+.review{background:linear-gradient(135deg,#547361,#6f8f7c);color:#fff;border:0}.review .q{font-family:"New York",Georgia,serif;font-size:18px;line-height:1.45;margin:8px 0 10px;white-space:pre-wrap}
+.stat3{display:flex;gap:10px}.stat3>div{flex:1;text-align:center}.stat3 b{display:block;font-size:22px}
+.mcal .d{min-height:44px}.mcal .d .e{font-size:17px;line-height:1}
+.info{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1ece3;font-size:13px}.info:last-child{border-bottom:0}
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 10px);transform:translate(-50%,-180%);background:var(--done);color:#fff;padding:12px 18px;border-radius:24px;font-weight:600;font-size:14px;z-index:30;transition:transform .35s;width:max-content;max-width:90%;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#toast.show{transform:translate(-50%,0)}#toast.warn{background:var(--warn)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<div id="sheet-wrap"><div id="sheet"></div></div>
+<input type="file" id="f-import" accept=".json,application/json" style="display:none">
+
+<script>
+"use strict";
+// ================== Dữ liệu & tiện ích ==================
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const C = {done:"#549e70", warn:"#d66654", amber:"#e0a138", muted:"#8f8a80", accent:"#547361", line:"#e6ded1"};
+
+const EXP = [["Ăn uống","🍜","#e38c5c"],["Đi lại","🚗","#5c8cbf"],["Nhà ở","🏠","#8c73b3"],["Hóa đơn","💡","#e6b84d"],
+  ["Mua sắm","🛍️","#d97394"],["Giải trí","🎮","#73b3b3"],["Sức khỏe","💊","#d66161"],["Học tập","📚","#547361"],
+  ["Gia đình","👨‍👩‍👧","#b38c66"],["Quà tặng","🎁","#bf80bf"],["Tiết kiệm","🏦","#669e7a"],["Khác","📦","#8c8c8c"]];
+const INC = [["Lương","💼","#4d946b"],["Thưởng","⭐","#e6b340"],["Kinh doanh","🏪","#5c85bf"],["Làm thêm","💻","#8c73b8"],
+  ["Đầu tư","📈","#409e9e"],["Lãi tiết kiệm","💰","#9eb359"],["Bán đồ","🏷️","#d98566"],["Được tặng","🎁","#d17a9e"],["Khác","📦","#8c8c8c"]];
+const catOf = (list, name) => list.find(c => c[0] === name) || list[list.length - 1];
+
+// ================== LƯU TRỮ AN TOÀN ==================
+// - Dữ liệu chính: IndexedDB (dung lượng lớn, không bị giới hạn 5MB như localStorage)
+// - Ghi gộp (debounce) để đỡ hao pin, ghi ngay khi thoát app
+// - Tự chụp bản sao lưu nén (gzip) mỗi ngày, giữ 7 bản gần nhất → lỡ hỏng dữ liệu vẫn khôi phục được
+// - Xin quyền lưu trữ bền vững để iOS không tự xóa
+const KEY = "kehoach-data-v1";
+const SNAP_KEEP = 7;
+const EMPTY = () => ({goals:[], tasks:[], expenses:[], incomes:[], journals:[], lessons:[], notified:{}, meta:{}});
+function normalize(d) {
+  const e = EMPTY(); d = d && typeof d === "object" ? d : {};
+  for (const k in e) e[k] = Array.isArray(e[k]) ? (Array.isArray(d[k]) ? d[k] : []) : (d[k] && typeof d[k] === "object" && !Array.isArray(d[k]) ? d[k] : {});
+  return e;
+}
+let db = EMPTY();
+const store = { idb:null, mode:"memory", persisted:false, lastSave:0, ok:true };
+const IDB = {
+  open() { return new Promise((res, rej) => { const r = indexedDB.open("kehoach", 1);
+    r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains("kv")) d.createObjectStore("kv"); if (!d.objectStoreNames.contains("snap")) d.createObjectStore("snap"); };
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onblocked = () => rej(new Error("blocked")); }); },
+  req(st, mode, fn) { return new Promise((res, rej) => { const tx = store.idb.transaction(st, mode), q = fn(tx.objectStore(st));
+    let out; q.onsuccess = () => out = q.result; tx.oncomplete = () => res(out); tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error); }); },
+  get: (st, k) => IDB.req(st, "readonly", o => o.get(k)),
+  put: (st, k, v) => IDB.req(st, "readwrite", o => o.put(v, k)),
+  del: (st, k) => IDB.req(st, "readwrite", o => o.delete(k)),
+  keys: st => IDB.req(st, "readonly", o => o.getAllKeys()),
+};
+const canGz = typeof CompressionStream !== "undefined" && typeof DecompressionStream !== "undefined";
+async function gz(str) { if (!canGz) return str; return await new Response(new Blob([str]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer(); }
+async function gunz(v) { if (typeof v === "string") return v; return await new Response(new Blob([v]).stream().pipeThrough(new DecompressionStream("gzip"))).text(); }
+
+let saveTimer = null;
+function save() { clearTimeout(saveTimer); saveTimer = setTimeout(writeNow, 300); }
+async function writeNow() {
+  clearTimeout(saveTimer); saveTimer = null;
+  const str = JSON.stringify(db);
+  try {
+    if (store.mode === "idb") await IDB.put("kv", "data", str);
+    else localStorage.setItem(KEY, str);
+    store.ok = true; store.lastSave = Date.now();
+    const sv = document.getElementById("saved-at"); if (sv) sv.textContent = "✓ Đã lưu tự động lúc " + hm(Date.now());
+    return true;
+  } catch (e) {
+    store.ok = false; toast("⚠️ Không lưu được dữ liệu! Vào ⚙︎ → Xuất file sao lưu ngay.", "warn"); return false;
+  }
+}
+async function snapshot(key) {
+  if (store.mode !== "idb") return;
+  try {
+    await IDB.put("snap", key, await gz(JSON.stringify(db)));
+    const ks = (await IDB.keys("snap")).map(String).sort();
+    for (const k of ks.slice(0, Math.max(0, ks.length - SNAP_KEEP))) await IDB.del("snap", k);
+  } catch (e) {}
+}
+async function readSnapshot(k) { try { return normalize(JSON.parse(await gunz(await IDB.get("snap", k)))); } catch (e) { return null; } }
+async function latestSnapshot() {
+  try { const ks = (await IDB.keys("snap")).map(String).sort().reverse(); for (const k of ks) { const d = await readSnapshot(k); if (d) return d; } } catch (e) {}
+  return null;
+}
+function compact() {
+  // Dọn các dấu "đã nhắc" cũ để file dữ liệu luôn gọn
+  const ids = new Map(db.tasks.map(t => [t.id, t])), cut = Date.now() - 3 * 86400000;
+  for (const k of Object.keys(db.notified)) {
+    const [id, kind] = k.split(":"), t = ids.get(id);
+    if (["sum", "goals", "jr"].includes(id)) { if (parseDate(kind.slice(0, 10)) != null && parseDate(kind.slice(0, 10)) < cut) delete db.notified[k]; continue; }
+    if (!t || t.end < cut) delete db.notified[k];
+  }
+  // Xóa trang nhật ký trống
+  db.journals = db.journals.filter(j => j.mood || (j.text || "").trim() || (j.grateful || "").trim());
+}
+async function loadDB() {
+  let raw = null;
+  try { store.idb = await IDB.open(); store.mode = "idb"; raw = await IDB.get("kv", "data"); } catch (e) { store.idb = null; store.mode = "local"; }
+  let legacy = null; try { legacy = localStorage.getItem(KEY); } catch (e) {}
+  let parsed = null;
+  try { parsed = raw ? JSON.parse(raw) : null; } catch (e) { parsed = null; }
+  // Chuyển dữ liệu cũ (localStorage) sang IndexedDB – chỉ dùng bản cũ nếu nó có nhiều dữ liệu hơn
+  const count = d => d ? ["goals","tasks","expenses","incomes","journals","lessons"].reduce((n, k) => n + (Array.isArray(d[k]) ? d[k].length : 0), 0) : -1;
+  let usedLegacy = false;
+  if (legacy) { let L = null; try { L = JSON.parse(legacy); } catch (e) {} if (L && count(L) > count(parsed)) { parsed = L; raw = legacy; usedLegacy = true; } else if (L && count(L) <= count(parsed)) usedLegacy = true; }
+  if (raw && !parsed) { parsed = await latestSnapshot(); setTimeout(() => toast(parsed ? "Dữ liệu bị lỗi – đã tự khôi phục từ bản sao lưu gần nhất" : "Dữ liệu bị lỗi và không có bản sao lưu", "warn"), 600); }
+  db = normalize(parsed);
+  compact();
+  if (store.mode === "idb" && await writeNow() && usedLegacy) { try { localStorage.removeItem(KEY); } catch (e) {} }
+  try { if (navigator.storage && navigator.storage.persist) store.persisted = await navigator.storage.persist(); } catch (e) {}
+  const today = isoDate(Date.now());
+  if (store.mode === "idb") { try { const ks = (await IDB.keys("snap")).map(String); if (!ks.some(k => k.startsWith(today))) await snapshot(today); } catch (e) {} }
+  const hasData = db.tasks.length + db.expenses.length + db.incomes.length + db.journals.length > 20;
+  if (hasData && (!db.meta.lastExport || Date.now() - db.meta.lastExport > 30 * 86400000) && (!db.meta.exportNag || Date.now() - db.meta.exportNag > 7 * 86400000)) {
+    db.meta.exportNag = Date.now(); save();
+    setTimeout(() => toast("💾 Đã lâu chưa sao lưu ra file. Vào ⚙︎ → Xuất file sao lưu nhé!", "warn"), 1500);
+  }
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden && saveTimer) writeNow(); });
+window.addEventListener("pagehide", () => { if (saveTimer) writeNow(); });
+
+// Ngày tháng
+const pad = n => String(n).padStart(2, "0");
+const dt = t => new Date(t);
+const Y = t => dt(t).getFullYear(), M = t => dt(t).getMonth() + 1, D = t => dt(t).getDate(), H = t => dt(t).getHours();
+const dim = t => new Date(Y(t), M(t), 0).getDate();
+const sod = t => new Date(Y(t), M(t) - 1, D(t)).getTime();
+const som = t => new Date(Y(t), M(t) - 1, 1).getTime();
+const soy = t => new Date(Y(t), 0, 1).getTime();
+const addD = (t, n) => { const d = dt(t); d.setDate(d.getDate() + n); return d.getTime(); };
+const addM = (t, n) => { const d = dt(t), day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n); d.setDate(Math.min(day, dim(d.getTime()))); return d.getTime(); };
+const addY = (t, n) => addM(t, 12 * n);
+const same = (a, b) => sod(a) === sod(b);
+const hm = t => pad(H(t)) + ":" + pad(dt(t).getMinutes());
+const dmy = t => pad(D(t)) + "/" + pad(M(t)) + "/" + Y(t);
+const isoDate = t => Y(t) + "-" + pad(M(t)) + "-" + pad(D(t));
+const isoDT = t => isoDate(t) + "T" + hm(t);
+const WD = ["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+const WDS = ["CN","T2","T3","T4","T5","T6","T7"];
+const parseDate = v => { const [y, m, d] = (v || "").split("-").map(Number); return y ? new Date(y, m - 1, d).getTime() : null; };
+const parseDT = v => { const [a, b] = (v || "").split("T"); const base = parseDate(a); if (base == null) return null; const [h, mi] = (b || "0:0").split(":").map(Number); return base + h * 3600000 + mi * 60000; };
+
+// Tiền
+const fmtNum = v => Math.round(v).toLocaleString("vi-VN");
+const money = v => fmtNum(v) + " ₫";
+function short(v) {
+  const a = Math.abs(v), f = x => (Math.round(x * 10) / 10).toString().replace(".", ",");
+  if (a >= 1e9) return f(v / 1e9) + " tỷ";
+  if (a >= 1e6) return f(v / 1e6) + "tr";
+  if (a >= 1e3) return Math.round(v / 1e3) + "k";
+  return String(Math.round(v));
+}
+const sum = arr => arr.reduce((s, x) => s + x.amount, 0);
+
+// Trạng thái công việc
+const isOverdue = t => !t.done && t.end < Date.now();
+function status(t) {
+  const n = Date.now();
+  if (t.done) return ["Hoàn thành", C.done];
+  if (t.end < n) return ["Chưa hoàn thành", C.warn];
+  if (t.start <= n) return ["Đang làm", C.amber];
+  return ["Sắp tới", C.muted];
+}
+
+// ================== Trạng thái giao diện ==================
+const ui = { dayView: localStorage.getItem("kehoach-dayview") || "board", tab:"plan", jMode:"day", jDate:Date.now(), jTag:"all", jQuery:"", jPick:null, scope:"day", date:Date.now(), exP:"month", exA:Date.now(), inP:"year", inA:Date.now(), edit:null };
+const PL = {day:"Ngày", month:"Tháng", year:"Năm", all:"Tất cả"};
+const SCOPE = {day:"trong ngày", month:"trong tháng", year:"trong năm", all:"toàn bộ"};
+const PREV = {day:"hôm trước", month:"tháng trước", year:"năm trước"};
+
+function range(P, A) {
+  if (P === "day") { const s = sod(A); return [s, addD(s, 1)]; }
+  if (P === "month") { const s = som(A); return [s, addM(s, 1)]; }
+  if (P === "year") { const s = soy(A); return [s, addY(s, 1)]; }
+  return null;
+}
+const shiftP = (P, A, n) => P === "day" ? addD(A, n) : P === "month" ? addM(A, n) : P === "year" ? addY(A, n) : A;
+const ptitle = (P, A) => P === "day" ? WD[dt(A).getDay()] + ", " + dmy(A) : P === "month" ? `Tháng ${M(A)}, ${Y(A)}` : `Năm ${Y(A)}`;
+const inRange = (items, r) => r ? items.filter(x => x.date >= r[0] && x.date < r[1]) : items.slice();
+
+function buckets(items, P, A) {
+  let s, e; const r = range(P, A);
+  if (r) [s, e] = r;
+  else { if (!items.length) return []; s = som(Math.min(...items.map(x => x.date))); e = addM(som(Math.max(...items.map(x => x.date))), 1); }
+  const key = P === "day" ? t => { const d = dt(t); d.setMinutes(0, 0, 0); return d.getTime(); } : P === "month" ? sod : som;
+  const step = P === "day" ? t => t + 3600000 : P === "month" ? t => addD(t, 1) : t => addM(t, 1);
+  const lab = P === "day" ? t => H(t) + "h" : P === "month" ? t => String(D(t)) : P === "year" ? t => "T" + M(t) : t => pad(M(t)) + "/" + String(Y(t)).slice(2);
+  const now = Date.now(); if (now >= s && now < e) e = step(key(now)); // không vẽ các mốc tương lai
+  const map = {}; items.forEach(x => { const k = key(x.date); map[k] = (map[k] || 0) + x.amount; });
+  const out = []; let cur = s, guard = 0;
+  while (cur < e && guard++ < 1000) { out.push({t:cur, label:lab(cur), value:map[cur] || 0}); cur = step(cur); }
+  return out;
+}
+
+// ================== Thành phần giao diện ==================
+const bar = p => `<div class="bar"><i style="width:${Math.max(0, Math.min(1, p)) * 100}%"></i></div>`;
+function ring(p, s = 48) {
+  const r = s / 2 - s * 0.07, c = 2 * Math.PI * r, w = s * 0.11;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="flex:none"><circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="${C.line}" stroke-width="${w}"/>${p > 0 ? `<circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="${C.done}" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${c * Math.min(p, 1)} ${c}" transform="rotate(-90 ${s/2} ${s/2})"/>` : ""}<text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="${s * 0.24}" font-weight="700" fill="#29292e">${Math.round(p * 100)}%</text></svg>`;
+}
+const navh = (t, sub, k) => `<div class="navh"><button data-a="prev" data-v="${k}" aria-label="Trước">‹</button><div class="t"><b class="serif">${t}</b>${sub ? `<small>${sub}</small>` : ""}</div><button data-a="next" data-v="${k}" aria-label="Sau">›</button></div>`;
+
+const ICONS = {
+  plan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  exp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h11l2-8H6.3"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg>',
+  jour:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v16H6.5A1.5 1.5 0 0 0 5 20.5z"/><path d="M5 20.5A1.5 1.5 0 0 0 6.5 22H19v-3"/><path d="M9 8h6M9 11.5h4"/></svg>',
+  inc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.8"/><path d="M6 9.5v5M18 9.5v5"/></svg>'
+};
+
+// ================== Biểu đồ SVG ==================
+function axisY(ticks, y, pl, W) {
+  return ticks.map(t => `<line class="grid" x1="${pl}" x2="${W}" y1="${y(t)}" y2="${y(t)}"/><text x="${pl - 5}" y="${y(t) + 3}" text-anchor="end">${short(t)}</text>`).join("");
+}
+function svgColumns(data, opt = {}) {
+  if (!data.length) return "";
+  const W = 340, Hh = opt.h || 190, pl = 40, pb = 20, pt = 10;
+  const vals = data.map(d => d.value), max = Math.max(0, ...vals), min = Math.min(0, ...vals), rg = (max - min) || 1;
+  const y = v => pt + (max - v) / rg * (Hh - pt - pb), n = data.length, bw = (W - pl) / n, every = Math.ceil(n / 8);
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" class="chart">` + axisY(min < 0 ? [max, 0, min] : [max, max / 2, 0], y, pl, W);
+  data.forEach((d, i) => {
+    const x = pl + i * bw + bw * 0.15, w = Math.max(bw * 0.7, 1), y0 = y(0), y1 = y(d.value);
+    if (d.value) s += `<rect x="${x}" y="${Math.min(y0, y1)}" width="${w}" height="${Math.max(Math.abs(y1 - y0), 1.5)}" rx="${Math.min(3, w / 2)}" fill="${d.color || C.accent}"/>`;
+    if (i % every === 0) s += `<text x="${x + w / 2}" y="${Hh - 5}" text-anchor="middle">${d.label}</text>`;
+  });
+  return s + "</svg>";
+}
+function svgGrouped(data) {
+  if (!data.length) return "";
+  const W = 340, Hh = 200, pl = 40, pb = 20, pt = 10;
+  const max = Math.max(1, ...data.map(d => Math.max(d.a, d.b)));
+  const y = v => pt + (max - v) / max * (Hh - pt - pb), n = data.length, bw = (W - pl) / n, every = Math.ceil(n / 8);
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" class="chart">` + axisY([max, max / 2, 0], y, pl, W);
+  data.forEach((d, i) => {
+    const x = pl + i * bw + bw * 0.12, w = bw * 0.36;
+    if (d.a) s += `<rect x="${x}" y="${y(d.a)}" width="${w}" height="${Math.max(y(0) - y(d.a), 1.5)}" rx="2" fill="${C.done}"/>`;
+    if (d.b) s += `<rect x="${x + w + 1}" y="${y(d.b)}" width="${w}" height="${Math.max(y(0) - y(d.b), 1.5)}" rx="2" fill="${C.warn}"/>`;
+    if (i % every === 0) s += `<text x="${x + w}" y="${Hh - 5}" text-anchor="middle">${d.label}</text>`;
+  });
+  return s + "</svg>";
+}
+function svgLine(data, opt = {}) {
+  if (!data.length) return "";
+  const W = 340, Hh = 190, pl = 40, pb = 20, pt = 14;
+  const max = Math.max(1, ...data.map(d => d.value)), n = data.length;
+  const x = i => n === 1 ? pl + (W - pl) / 2 : pl + 4 + i * (W - pl - 10) / (n - 1);
+  const y = v => pt + (max - v) / max * (Hh - pt - pb);
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" class="chart">` + axisY([max, max / 2, 0], y, pl, W);
+  let pts = data.map((d, i) => [x(i), y(d.value)]);
+  if (opt.step) { const p2 = []; pts.forEach((p, i) => { if (i > 0) p2.push([p[0], pts[i - 1][1]]); p2.push(p); }); pts = p2; }
+  const line = pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  s += `<polygon points="${pts[0][0]},${y(0)} ${line} ${pts[pts.length - 1][0]},${y(0)}" fill="${C.done}26"/>`;
+  s += `<polyline points="${line}" fill="none" stroke="${C.done}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  if (!opt.step) data.forEach((d, i) => s += `<circle cx="${x(i)}" cy="${y(d.value)}" r="3.2" fill="#fff" stroke="${C.done}" stroke-width="2"/>`);
+  if (opt.avg) s += `<line x1="${pl}" x2="${W}" y1="${y(opt.avg)}" y2="${y(opt.avg)}" stroke="${C.muted}" stroke-dasharray="4 4"/><text x="${W - 2}" y="${y(opt.avg) - 4}" text-anchor="end">TB ${short(opt.avg)}</text>`;
+  const every = Math.ceil(n / 8);
+  data.forEach((d, i) => { if (i % every === 0) s += `<text x="${x(i)}" y="${Hh - 5}" text-anchor="middle">${d.label}</text>`; });
+  return s + "</svg>";
+}
+function hbars(title, list) {
+  const tot = list.reduce((s, c) => s + c.value, 0), max = Math.max(1, ...list.map(c => c.value));
+  return `<div class="card"><h3 class="serif">${title}</h3>${list.map(c => `<div class="hbar"><span class="lb">${c.icon} ${c.name}</span><div class="tr"><i style="width:${c.value / max * 100}%;background:${c.color}"></i></div><span class="v">${short(c.value)}</span></div>`).join("")}<hr>${list.map(c => `<div class="row small" style="padding:4px 0"><span>${c.icon}</span><span style="flex:1">${c.name}</span><b style="font-variant-numeric:tabular-nums">${money(c.value)}</b><span class="muted" style="width:38px;text-align:right">${Math.round(c.value / tot * 100)}%</span></div>`).join("")}</div>`;
+}
+function groupCats(items, key, list) {
+  const m = {}; items.forEach(x => m[x[key]] = (m[x[key]] || 0) + x.amount);
+  return Object.entries(m).map(([n, v]) => { const c = catOf(list, n); return {name:c[0], icon:c[1], color:c[2], value:v}; }).sort((a, b) => b.value - a.value);
+}
+function changeLine(c, p, label, higherGood) {
+  const d = c - p, up = d >= 0, ok = up === higherGood;
+  const pct = p ? ` (${up ? "+" : "−"}${Math.round(Math.abs(d / p * 100))}%)` : "";
+  const col = d === 0 ? C.muted : ok ? C.done : C.warn;
+  return `<div class="small" style="color:${col};font-weight:700;margin-top:6px">${d === 0 ? "＝" : up ? "↗" : "↘"} ${up ? "+" : "−"}${money(Math.abs(d))}${pct} <span class="muted" style="font-weight:400">so với ${label}</span></div>`;
+}
+
+// ================== Màn hình ==================
+function render() {
+  const titles = {plan:"Kế hoạch", exp:"Chi tiêu", inc:"Thu nhập", jour:"Nhật ký"};
+  const body = ui.tab === "plan" ? renderPlan() : ui.tab === "exp" ? renderExp() : ui.tab === "inc" ? renderInc() : renderJournal();
+  $("#app").innerHTML =
+    `<header class="top"><div class="row sb"><button class="hbtn" style="text-align:left;font-size:20px" data-a="settings" aria-label="Cài đặt">⚙︎</button><b style="font-size:17px">${titles[ui.tab]}</b><button class="hbtn" style="text-align:right" data-a="today">Hôm nay</button></div></header>
+     <main>${body}</main>
+     <button class="fab" data-a="fab" aria-label="Thêm">+</button>
+     <nav class="tabs">${["plan", "exp", "inc", "jour"].map(t => `<button data-a="tab" data-v="${t}" class="${ui.tab === t ? "on" : ""}">${ICONS[t]}${titles[t]}</button>`).join("")}</nav>`;
+}
+
+// ---------- KẾ HOẠCH ----------
+function renderPlan() {
+  let h = `<div class="seg">${["year", "month", "day"].map(s => `<button data-a="scope" data-v="${s}" class="${ui.scope === s ? "on" : ""}">${PL[s]}</button>`).join("")}</div>`;
+  return h + (ui.scope === "year" ? renderYear() : ui.scope === "month" ? renderMonth() : renderDay());
+}
+
+function goalsCard(title, y, m) {
+  const gs = db.goals.filter(g => g.year === y && g.month === m).sort((a, b) => a.created - b.created);
+  const done = gs.filter(g => g.done).length;
+  return `<div class="card"><div class="row sb"><h3 class="serif" style="margin:0">${title}</h3><div class="row"><span class="muted small">${gs.length ? done + "/" + gs.length : ""}</span><button class="plus" data-a="addGoal" data-v="${y}-${m}">+</button></div></div>
+    ${gs.length ? bar(done / gs.length) + gs.map(g => `<div class="row goal" data-a="editGoal" data-id="${g.id}"><button class="check ${g.done ? "on" : ""}" data-a="toggleGoal" data-id="${g.id}" aria-label="Hoàn thành"></button><div style="flex:1;min-width:0"><div class="${g.done ? "strike" : ""}">${esc(g.title)}</div>${g.note ? `<div class="muted small">${esc(g.note)}</div>` : ""}<div class="small" style="color:${g.done ? C.done : C.warn};font-weight:600;margin-top:2px">${g.done ? "✓ Hoàn thành ngày " + dmy(g.doneAt) : "Chưa hoàn thành"}</div></div></div>`).join("")
+      : `<p class="muted small" style="margin:8px 0 0">Chưa có mục tiêu. Nhấn + để đặt mục tiêu.</p>`}</div>`;
+}
+
+function renderYear() {
+  const y = Y(ui.date), now = new Date();
+  const yg = db.goals.filter(g => g.year === y && g.month === 0), mg = db.goals.filter(g => g.year === y && g.month > 0), yt = db.tasks.filter(t => Y(t.start) === y);
+  const tile = (t, arr) => { const d = arr.filter(x => x.done).length; return `<div class="card tile">${ring(arr.length ? d / arr.length : 0, 50)}<b>${d}/${arr.length}</b><span class="muted small">${t}</span></div>`; };
+  let h = navh("Năm " + y, "Mục tiêu & tiến độ cả năm", "year");
+  h += `<div class="tiles">${tile("Mục tiêu năm", yg)}${tile("Mục tiêu tháng", mg)}${tile("Công việc", yt)}</div>`;
+  h += goalsCard("Mục tiêu năm " + y, y, 0);
+  h += `<h3 class="serif">12 tháng</h3><div class="months">`;
+  for (let m = 1; m <= 12; m++) {
+    const g = db.goals.filter(x => x.year === y && x.month === m), t = db.tasks.filter(x => Y(x.start) === y && M(x.start) === m);
+    const tot = g.length + t.length, d = g.filter(x => x.done).length + t.filter(x => x.done).length;
+    h += `<button class="mtile ${now.getFullYear() === y && now.getMonth() + 1 === m ? "cur" : ""}" data-a="pickMonth" data-v="${new Date(y, m - 1, 1).getTime()}"><b class="serif">Tháng ${m}</b>${ring(tot ? d / tot : 0, 46)}<span class="muted small ell">${g[0] ? esc(g[0].title) : "—"}</span></button>`;
+  }
+  return h + "</div>";
+}
+
+function renderMonth() {
+  const first = som(ui.date), next = addM(first, 1), y = Y(first), m = M(first);
+  const mt = db.tasks.filter(t => t.start >= first && t.start < next);
+  let h = navh(`Tháng ${m}, ${y}`, "Nhấn vào một ngày để xem chi tiết", "month");
+  const off = (dt(first).getDay() + 6) % 7, days = dim(first);
+  h += `<div class="card"><div class="cal">${["T2","T3","T4","T5","T6","T7","CN"].map(w => `<div class="wh">${w}</div>`).join("")}`;
+  for (let i = 0; i < off; i++) h += "<div></div>";
+  for (let d = 1; d <= days; d++) {
+    const ts = new Date(y, m - 1, d).getTime(), list = mt.filter(t => same(t.start, ts));
+    const done = list.filter(t => t.done).length, od = list.some(isOverdue), all = list.length && done === list.length;
+    h += `<button class="d ${same(ts, Date.now()) ? "today" : ""}" style="${all ? `background:${C.done}24` : od ? `background:${C.warn}1c` : ""}" data-a="pickDay" data-v="${ts}"><span class="n">${d}</span><span class="dots">${list.slice(0, 4).map((_, i) => `<i style="background:${i < done ? C.done : od ? C.warn : C.muted + "80"}"></i>`).join("")}</span></button>`;
+  }
+  h += `</div><div class="legend"><span><i style="background:${C.done}"></i>Đã xong</span><span><i style="background:${C.warn}"></i>Quá hạn</span><span><i style="background:${C.muted}80"></i>Chưa làm</span></div></div>`;
+  const done = mt.filter(t => t.done).length, od = mt.filter(isOverdue).length;
+  h += `<div class="card"><h3 class="serif">Tiến độ công việc tháng</h3>${bar(mt.length ? done / mt.length : 0)}<div class="row sb small" style="margin-top:8px"><span style="color:${C.done}">✓ ${done} hoàn thành</span><span class="muted">○ ${mt.length - done - od} chưa làm</span><span style="color:${C.warn}">! ${od} quá hạn</span></div></div>`;
+  const rs = mt.filter(t => !t.done && t.reason).sort((a, b) => b.start - a.start);
+  const noR = mt.filter(t => isOverdue(t) && !t.reason).length;
+  h += `<div class="card"><h3 class="serif">Nhìn lại: vì sao chưa xong?</h3>${rs.length ? rs.map(t => `<div style="padding:7px 0;border-bottom:1px solid #f1ece3"><div class="row sb small"><b>${esc(t.title)}</b><span class="muted">${pad(D(t.start))}/${pad(M(t.start))}</span></div><div class="small" style="color:${C.warn};margin-top:2px">${esc(t.reason)}</div></div>`).join("") : `<p class="muted small" style="margin:0">Chưa có lý do nào được ghi.</p>`}${noR ? `<p class="small" style="color:${C.warn};margin:8px 0 0">Còn ${noR} việc quá hạn chưa ghi lý do.</p>` : ""}</div>`;
+  return h + goalsCard("Mục tiêu tháng " + m, y, m);
+}
+
+function chip(t) {
+  const [lb, c] = status(t);
+  return `<div class="chip" style="--c:${c};background:${c}14" data-a="editTask" data-id="${t.id}"><button class="check ${t.done ? "on" : ""}" data-a="toggleTask" data-id="${t.id}" aria-label="Hoàn thành"></button><div style="flex:1;min-width:0"><div class="${t.done ? "strike" : ""}" style="font-weight:600">${esc(t.title)}</div><div class="muted small">${hm(t.start)} – ${hm(t.end)}${t.remind && !t.done ? " 🔔" : ""}${t.done && t.doneAt ? " · xong lúc " + hm(t.doneAt) : ""}</div>${t.note ? `<div class="muted small">${esc(t.note)}</div>` : ""}${t.reason && !t.done ? `<div class="small" style="color:${C.warn}">Lý do: ${esc(t.reason)}</div>` : ""}</div><span class="badge" style="background:${c}29;color:${c}">${lb}</span></div>`;
+}
+
+function table3(list) {
+  let h = `<div class="tbl"><div class="tr3 th3"><div>📝 Việc gì</div><div>Trạng thái</div><div>Lý do chưa xong</div></div>`;
+  if (!list.length) h += `<div class="kempty muted small" style="text-align:center;padding:22px">Chưa có việc nào trong ngày.</div>`;
+  list.forEach(t => {
+    const st = status(t), late = isOverdue(t), past = sod(t.start) < sod(Date.now());
+    const label = t.done ? "✅ Đã xong" : late ? "❌ Chưa xong" : st[0] === "Đang làm" ? "⏳ Đang làm" : "🕒 Chưa tới giờ";
+    const statusCell = `<button class="stbtn" style="background:${st[1]}1f;color:${st[1]}" data-a="toggleTask" data-id="${t.id}">${label}${t.done && t.doneAt ? `<br><span style="font-weight:500;font-size:10.5px">lúc ${hm(t.doneAt)}</span>` : `<br><span style="font-weight:500;font-size:10.5px">chạm để ✓</span>`}</button>${late ? `<button class="mv" data-a="moveTask" data-id="${t.id}">↪ Dời ${past ? "hôm nay" : "ngày mai"}</button>` : ""}`;
+    const reasonCell = t.done
+      ? (t.reason ? `<div class="small muted">${esc(t.reason)}</div>` : `<div class="small" style="color:${C.done}">Hoàn thành 👍</div>`)
+      : `<textarea class="reason ${late && !t.reason ? "need" : ""}" data-reason="${t.id}" rows="3" placeholder="${late ? "Vì sao chưa xong?" : "Ghi chú nếu bị trễ…"}">${esc(t.reason || "")}</textarea>`;
+    h += `<div class="tr3" style="background:${t.done ? C.done + "0d" : late ? C.warn + "0a" : "#fff"}"><div data-a="editTask" data-id="${t.id}"><div class="tt ${t.done ? "strike" : ""}">${esc(t.title)}</div><div class="tm">${hm(t.start)} – ${hm(t.end)}${t.remind && !t.done ? " 🔔" : ""}</div>${t.note ? `<div class="tm">${esc(t.note)}</div>` : ""}</div><div>${statusCell}</div><div>${reasonCell}</div></div>`;
+  });
+  return h + `<button class="tadd" data-a="fab">+ Thêm việc</button></div>`;
+}
+
+function renderDay() {
+  const d = ui.date, list = db.tasks.filter(t => same(t.start, d)).sort((a, b) => a.start - b.start);
+  let h = navh(WD[dt(d).getDay()] + ", " + pad(D(d)) + "/" + pad(M(d)), String(Y(d)), "day");
+  const mon = addD(sod(d), -((dt(d).getDay() + 6) % 7));
+  h += `<div class="week">`;
+  for (let i = 0; i < 7; i++) {
+    const ts = addD(mon, i), tl = db.tasks.filter(t => same(t.start, ts));
+    const dot = !tl.length ? "transparent" : tl.every(t => t.done) ? C.done : tl.some(isOverdue) ? C.warn : C.muted;
+    h += `<button class="${same(ts, d) ? "on" : same(ts, Date.now()) ? "td" : ""}" data-a="pickDay" data-v="${ts}"><span>${WDS[dt(ts).getDay()]}</span><b>${D(ts)}</b><i class="wdot" style="background:${dot}"></i></button>`;
+  }
+  h += `</div>`;
+  const tot = list.length, done = list.filter(t => t.done).length, od = list.filter(isOverdue).length;
+  h += `<div class="card row" style="gap:14px">${ring(tot ? done / tot : 0, 60)}<div><b style="font-size:16px">${tot ? (done === tot ? "🎉 Đã hoàn thành tất cả!" : `Đã xong ${done}/${tot} việc`) : "Chưa có việc nào"}</b><div class="small" style="margin-top:6px"><span style="color:${C.done}">✓ ${done} xong</span> · <span class="muted">${tot - done} chưa xong</span>${od ? ` · <span style="color:${C.warn}">${od} quá hạn</span>` : ""}</div></div></div>`;
+  const allOd = db.tasks.filter(isOverdue);
+  if (allOd.length) h += `<button class="banner" data-a="showOverdue">⚠️ Có ${allOd.length} việc đã quá hạn mà chưa hoàn thành<span style="margin-left:auto">›</span></button>`;
+  h += `<div class="seg"><button data-a="dayView" data-v="board" class="${ui.dayView === "board" ? "on" : ""}">▦ Bảng việc</button><button data-a="dayView" data-v="hours" class="${ui.dayView === "hours" ? "on" : ""}">☰ Theo giờ</button></div>`;
+  if (ui.dayView === "board") return h + table3(list) + `<p class="muted small" style="text-align:center">Chạm ô Trạng thái để đánh dấu xong / chưa xong. Việc quá hạn có ô lý do viền đỏ — ghi lại để cuối tháng nhìn lại.</p>`;
+  const fh = Math.min(5, ...list.map(t => H(t.start))), nowH = new Date().getHours(), today = same(d, Date.now());
+  h += `<div class="card"><h3 class="serif">Lịch trình theo giờ</h3>`;
+  for (let hr = fh; hr <= 23; hr++) {
+    const ht = list.filter(t => H(t.start) === hr);
+    h += `<div class="hour"><div class="h" style="${today && hr === nowH ? `color:${C.accent};font-weight:800` : ""}">${pad(hr)}:00</div><div class="slot">${ht.length ? ht.map(chip).join("") : `<button class="empty-slot" data-a="addTask" data-v="${hr}" aria-label="Thêm việc lúc ${hr} giờ"></button>`}</div></div>`;
+  }
+  return h + `</div><p class="muted small" style="text-align:center">Chạm vào dòng giờ trống để thêm việc đúng giờ đó.</p>`;
+}
+
+// ---------- TIỀN (dùng chung) ----------
+function periodBar(kind, P, A) {
+  let h = `<div class="seg">${Object.keys(PL).map(p => `<button data-a="period" data-k="${kind}" data-v="${p}" class="${P === p ? "on" : ""}">${PL[p]}</button>`).join("")}</div>`;
+  return h + (P === "all" ? `<div class="navh"><div class="t"><b class="serif">Toàn bộ thời gian</b></div></div>` : navh(ptitle(P, A), "", kind));
+}
+function entryList(title, items, isE) {
+  const groups = {}; items.forEach(x => { const k = sod(x.date); (groups[k] = groups[k] || []).push(x); });
+  const keys = Object.keys(groups).map(Number).sort((a, b) => b - a);
+  let h = `<div class="card"><h3 class="serif">${title}</h3>`;
+  if (!items.length) h += `<p class="muted small" style="text-align:center;padding:14px 0;margin:0">Chưa có khoản ${isE ? "chi" : "thu"} nào trong kỳ này.<br>Nhấn + để ghi lại.</p>`;
+  keys.forEach(k => {
+    const g = groups[k].sort((a, b) => b.date - a.date);
+    h += `<div class="row sb small muted" style="font-weight:700;margin-top:10px"><span>${WD[dt(k).getDay()]}, ${dmy(k)}</span><span>${isE ? "" : "+"}${money(sum(g))}</span></div>`;
+    g.forEach(x => {
+      const c = catOf(isE ? EXP : INC, isE ? x.cat : x.src), note = isE ? x.reason : x.note;
+      h += `<div class="entry" data-a="editMoney" data-k="${isE ? "exp" : "inc"}" data-id="${x.id}"><span class="ic" style="background:${c[2]}26">${c[1]}</span><div style="flex:1;min-width:0"><div style="font-weight:600">${c[0]}</div><div class="muted small">${isE ? "" : "lúc "}${hm(x.date)}${note ? " · " + esc(note) : ""}</div></div><b style="color:${isE ? C.warn : C.done};font-variant-numeric:tabular-nums;white-space:nowrap">${isE ? "−" : "+"}${money(x.amount)}</b></div>`;
+    });
+  });
+  return h + "</div>";
+}
+
+// ---------- CHI TIÊU ----------
+function renderExp() {
+  const P = ui.exP, A = ui.exA, items = inRange(db.expenses, range(P, A)), total = sum(items);
+  let h = periodBar("exp", P, A);
+  const big = items.reduce((b, x) => !b || x.amount > b.amount ? x : b, null);
+  let avg = "";
+  if (P === "month" && total) { const now = new Date(); const days = Y(A) === now.getFullYear() && M(A) === now.getMonth() + 1 ? now.getDate() : dim(A); avg = ` · TB ${money(total / days)}/ngày`; }
+  h += `<div class="card"><div class="muted small">Tổng chi ${SCOPE[P]}</div><div class="big" style="color:${C.warn}">${money(total)}</div><div class="muted small">${items.length} khoản chi${avg}</div>${big ? `<div class="muted small" style="margin-top:4px">Khoản lớn nhất: ${big.cat} – ${money(big.amount)}${big.reason ? " (" + esc(big.reason) + ")" : ""}</div>` : ""}${P !== "all" ? changeLine(total, sum(inRange(db.expenses, range(P, shiftP(P, A, -1)))), PREV[P], false) : ""}</div>`;
+  if (items.length) {
+    h += hbars("Chi theo danh mục", groupCats(items, "cat", EXP));
+    if (P !== "day") {
+      const b = buckets(items, P, A), top = b.reduce((m, x) => x.value > m.value ? x : m, b[0]);
+      h += `<div class="card"><h3 class="serif">${P === "month" ? "Chi theo từng ngày" : "Chi theo từng tháng"}</h3>${svgColumns(b.map(x => ({...x, color: x === top ? C.warn : C.accent + "cc"})))}${top && top.value ? `<div class="muted small" style="margin-top:6px">Chi nhiều nhất: ${P === "month" ? "ngày " + dmy(top.t) : "tháng " + pad(M(top.t)) + "/" + Y(top.t)} — ${money(top.value)}</div>` : ""}</div>`;
+    }
+  }
+  return h + entryList("Chi tiết các khoản", items, true);
+}
+
+// ---------- THU NHẬP ----------
+function renderInc() {
+  const P = ui.inP, A = ui.inA, r = range(P, A), items = inRange(db.incomes, r), exps = inRange(db.expenses, r);
+  const total = sum(items), spent = sum(exps), net = total - spent;
+  let h = periodBar("inc", P, A);
+  h += `<div class="card"><div class="muted small">Tổng thu ${SCOPE[P]}</div><div class="big" style="color:${C.done}">${money(total)}</div><div class="muted small">${items.length} khoản thu</div>${P !== "all" ? changeLine(total, sum(inRange(db.incomes, range(P, shiftP(P, A, -1)))), PREV[P], true) : ""}<hr><div class="row sb"><div><div class="muted small">Đã chi</div><b style="color:${C.warn}">${money(spent)}</b></div><div style="text-align:right"><div class="muted small">Còn lại (thu − chi)</div><b style="color:${net >= 0 ? C.done : C.warn}">${net < 0 ? "−" : ""}${money(Math.abs(net))}</b></div></div>${total ? `<div class="muted small" style="margin-top:6px">Tỷ lệ tiết kiệm: ${Math.round(Math.max(net, 0) / total * 100)}%</div>` : ""}</div>`;
+  const long = P === "year" || P === "all";
+  if (items.length) {
+    const b = buckets(items, P, A);
+    if (long) {
+      const avg = b.reduce((s, x) => s + x.value, 0) / (b.length || 1);
+      h += `<div class="card"><h3 class="serif">Thu nhập từng tháng</h3>${svgLine(b, {avg})}</div>`;
+      const diffs = b.slice(1).map((x, i) => ({label:x.label, t:x.t, value:x.value - b[i].value}));
+      diffs.forEach(d => d.color = d.value >= 0 ? C.done : C.warn);
+      const upMax = diffs.filter(d => d.value > 0).sort((a, c) => c.value - a.value)[0], downMax = diffs.filter(d => d.value < 0).sort((a, c) => a.value - c.value)[0];
+      h += `<div class="card"><h3 class="serif">Tăng / giảm so với tháng trước</h3>${diffs.length ? svgColumns(diffs, {h:180}) + `<div class="small" style="margin-top:6px;font-weight:700">${upMax ? `<div style="color:${C.done}">↗ Tăng mạnh nhất: tháng ${pad(M(upMax.t))}/${Y(upMax.t)} +${short(upMax.value)}</div>` : ""}${downMax ? `<div style="color:${C.warn}">↘ Giảm mạnh nhất: tháng ${pad(M(downMax.t))}/${Y(downMax.t)} −${short(-downMax.value)}</div>` : ""}</div>` : `<p class="muted small">Cần ít nhất 2 tháng dữ liệu.</p>`}</div>`;
+    } else {
+      let run = 0; const cum = b.map(x => ({...x, value: run += x.value}));
+      h += `<div class="card"><h3 class="serif">Thu nhập cộng dồn ${P === "month" ? "trong tháng" : "trong ngày"}</h3>${svgLine(cum, {step:true})}</div>`;
+    }
+    h += hbars("Thu nhập theo nguồn", groupCats(items, "src", INC));
+  }
+  if (long && (items.length || exps.length)) {
+    let bi = buckets(items, P, A), be = buckets(exps, P, A);
+    if (P === "all") { // gộp theo cùng mốc tháng
+      const keys = [...new Set([...bi, ...be].map(x => x.t))].sort((a, b) => a - b);
+      const mi = Object.fromEntries(bi.map(x => [x.t, x.value])), me = Object.fromEntries(be.map(x => [x.t, x.value]));
+      const s = keys[0], e = keys[keys.length - 1]; bi = []; for (let t = s; t <= e; t = addM(t, 1)) bi.push({t, label: pad(M(t)) + "/" + String(Y(t)).slice(2), a: mi[t] || 0, b: me[t] || 0});
+      h += `<div class="card"><h3 class="serif">Thu và chi theo tháng</h3>${svgGrouped(bi)}<div class="lg"><span><i style="background:${C.done}"></i>Thu</span><span><i style="background:${C.warn}"></i>Chi</span></div></div>`;
+    } else {
+      const g = bi.map((x, i) => ({label:x.label, a:x.value, b:be[i] ? be[i].value : 0}));
+      h += `<div class="card"><h3 class="serif">Thu và chi theo tháng</h3>${svgGrouped(g)}<div class="lg"><span><i style="background:${C.done}"></i>Thu</span><span><i style="background:${C.warn}"></i>Chi</span></div></div>`;
+    }
+  }
+  return h + entryList("Chi tiết các khoản thu", items, false);
+}
+
+// ---------- NHẬT KÝ ----------
+const MOODS = [["😞","Tệ"],["😕","Hơi tệ"],["😐","Bình thường"],["🙂","Tốt"],["😄","Tuyệt vời"]];
+const LTAGS = [["Công việc","💼"],["Tiền bạc","💰"],["Sức khỏe","💪"],["Quan hệ","❤️"],["Bản thân","🌱"],["Khác","📌"]];
+const tagIcon = t => (LTAGS.find(x => x[0] === t) || LTAGS[5])[1];
+const jOf = day => db.journals.find(j => j.day === sod(day));
+function writtenDays() { const s = new Set(); db.journals.forEach(j => s.add(j.day)); db.lessons.forEach(l => s.add(l.day)); return s; }
+function streak() {
+  const s = writtenDays(); let d = sod(Date.now()), n = 0;
+  if (!s.has(d)) d = addD(d, -1);
+  while (s.has(d)) { n++; d = addD(d, -1); }
+  return n;
+}
+function lessonRow(l, showDate) {
+  return `<div class="lesson"><button class="star ${l.star ? "on" : ""}" data-a="starLesson" data-id="${l.id}" aria-label="Đánh dấu quan trọng">${l.star ? "★" : "☆"}</button><div class="lt" data-a="editLesson" data-id="${l.id}">${esc(l.text)}<div><span class="tag">${tagIcon(l.tag)} ${esc(l.tag)}</span>${showDate ? ` <span class="muted small">· ${dmy(l.day)}</span>` : ""}</div></div></div>`;
+}
+function renderJournal() {
+  let h = `<div class="seg">${[["day","📔 Nhật ký"],["lessons","💡 Bài học"]].map(([k, l]) => `<button data-a="jMode" data-v="${k}" class="${ui.jMode === k ? "on" : ""}">${l}</button>`).join("")}</div>`;
+  return h + (ui.jMode === "day" ? renderJDay() : renderLessons());
+}
+function renderJDay() {
+  const d = sod(ui.jDate), j = jOf(d) || {}, lessons = db.lessons.filter(l => l.day === d).sort((a, b) => a.created - b.created);
+  let h = navh(WD[dt(d).getDay()] + ", " + pad(D(d)) + "/" + pad(M(d)), same(d, Date.now()) ? "Hôm nay · " + Y(d) : String(Y(d)), "jday");
+  h += `<div class="card stat3"><div><b>🔥 ${streak()}</b><span class="muted small">ngày liên tiếp</span></div><div><b>${db.journals.length}</b><span class="muted small">trang nhật ký</span></div><div><b>${db.lessons.length}</b><span class="muted small">bài học</span></div></div>`;
+  h += `<div class="card"><h3 class="serif">Hôm nay bạn thấy thế nào?</h3><div class="moods">${MOODS.map((m, i) => `<button data-a="setMood" data-v="${i + 1}" class="${j.mood === i + 1 ? "on" : ""}"><span>${m[0]}</span>${m[1]}</button>`).join("")}</div></div>`;
+  h += `<div class="card"><h3 class="serif">📔 Nhật ký</h3><textarea class="jt" data-jf="text" rows="7" placeholder="Hôm nay đã diễn ra thế nào? Điều gì làm bạn vui, điều gì làm bạn mệt?">${esc(j.text || "")}</textarea>
+    <h3 class="serif" style="margin-top:14px">🙏 Điều biết ơn hôm nay</h3><textarea class="jt" data-jf="grateful" rows="3" placeholder="1. …&#10;2. …&#10;3. …">${esc(j.grateful || "")}</textarea>
+    <div class="saved" id="saved-at">${j.updated ? "✓ Đã lưu lúc " + hm(j.updated) : "Tự động lưu khi bạn gõ"}</div></div>`;
+  h += `<div class="card"><h3 class="serif">💡 Bài học rút ra hôm nay</h3>${lessons.length ? lessons.map(l => lessonRow(l, false)).join("") : `<p class="muted small" style="margin:0">Hôm nay bạn học được điều gì? Viết ngắn gọn 1 câu để sau này đọc lại.</p>`}
+    <textarea class="jt" id="l-text" rows="2" placeholder="VD: Làm việc khó nhất vào buổi sáng thì hiệu quả hơn" style="margin-top:10px"></textarea>
+    <div class="addrow"><select id="l-tag">${LTAGS.map(t => `<option value="${t[0]}">${t[1]} ${t[0]}</option>`).join("")}</select><button class="btn pri" style="margin:0;flex:1;padding:10px" data-a="addLesson">+ Thêm bài học</button></div></div>`;
+  // Tóm tắt tự động từ các tab khác
+  const tl = db.tasks.filter(t => same(t.start, d)), done = tl.filter(t => t.done).length, nd = tl.filter(t => !t.done && t.end < Date.now());
+  const sp = sum(db.expenses.filter(x => same(x.date, d))), ea = sum(db.incomes.filter(x => same(x.date, d)));
+  h += `<div class="card"><h3 class="serif">📊 Tóm tắt ngày (tự động)</h3>
+    <div class="info"><span>Công việc</span><b>${tl.length ? `${done}/${tl.length} việc xong` : "—"}</b></div>
+    ${nd.map(t => `<div class="info"><span style="color:${C.warn}">✗ ${esc(t.title)}</span><span class="muted" style="text-align:right;max-width:55%">${t.reason ? esc(t.reason) : "chưa ghi lý do"}</span></div>`).join("")}
+    <div class="info"><span>Đã chi</span><b style="color:${C.warn}">${money(sp)}</b></div>
+    <div class="info"><span>Đã thu</span><b style="color:${C.done}">${money(ea)}</b></div></div>`;
+  // Lịch tâm trạng của tháng
+  const first = som(d), off = (dt(first).getDay() + 6) % 7, days = dim(first), ws = writtenDays();
+  h += `<div class="card"><h3 class="serif">Tâm trạng tháng ${M(d)}</h3><div class="cal mcal">${["T2","T3","T4","T5","T6","T7","CN"].map(w => `<div class="wh">${w}</div>`).join("")}`;
+  for (let i = 0; i < off; i++) h += "<div></div>";
+  for (let k = 1; k <= days; k++) {
+    const ts = new Date(Y(d), M(d) - 1, k).getTime(), jj = jOf(ts);
+    h += `<button class="d ${same(ts, Date.now()) ? "today" : ""}" style="${same(ts, d) ? `outline:2px solid ${C.accent}` : ""}" data-a="pickJDay" data-v="${ts}"><span class="n" style="width:auto;height:auto;line-height:1.4;font-size:12px;${same(ts, Date.now()) ? "padding:0 6px;border-radius:9px" : ""}">${k}</span><span class="e">${jj && jj.mood ? MOODS[jj.mood - 1][0] : ws.has(ts) ? "✍️" : ""}</span></button>`;
+  }
+  return h + `</div></div>`;
+}
+function lessonListHTML() {
+  const q = ui.jQuery.trim().toLowerCase();
+  let list = db.lessons.slice().sort((a, b) => b.day - a.day || b.created - a.created);
+  if (ui.jTag === "star") list = list.filter(l => l.star); else if (ui.jTag !== "all") list = list.filter(l => l.tag === ui.jTag);
+  if (q) list = list.filter(l => l.text.toLowerCase().includes(q));
+  if (!list.length) return `<p class="muted small" style="text-align:center;padding:16px 0;margin:0">${db.lessons.length ? "Không tìm thấy bài học phù hợp." : "Chưa có bài học nào. Viết bài học đầu tiên ở trang Nhật ký hoặc bấm +."}</p>`;
+  let h = "", cur = "";
+  list.forEach(l => { const g = "Tháng " + M(l.day) + "/" + Y(l.day); if (g !== cur) { cur = g; h += `<div class="small muted" style="font-weight:800;margin-top:12px">${g}</div>`; } h += lessonRow(l, true); });
+  return h;
+}
+function renderLessons() {
+  const all = db.lessons;
+  let h = "";
+  if (all.length) {
+    if (!ui.jPick || !all.find(l => l.id === ui.jPick)) { const pool = all.filter(l => l.star).length ? all.filter(l => l.star) : all; ui.jPick = pool[Math.floor(Math.random() * pool.length)].id; }
+    const l = all.find(x => x.id === ui.jPick);
+    h += `<div class="card review"><div class="small" style="opacity:.85">💭 Ôn lại một bài học · ${dmy(l.day)}</div><div class="q">“${esc(l.text)}”</div><div class="row sb"><span class="tag" style="background:rgba(255,255,255,.2);color:#fff">${tagIcon(l.tag)} ${esc(l.tag)}</span><button class="mini" style="background:#fff;color:${C.accent}" data-a="nextReview">Bài khác ↻</button></div></div>`;
+  }
+  const cnt = t => all.filter(l => l.tag === t).length;
+  h += `<input class="search" id="l-search" type="search" placeholder="🔍 Tìm trong ${all.length} bài học…" value="${esc(ui.jQuery)}">`;
+  h += `<div class="chips"><button data-a="jTag" data-v="all" class="${ui.jTag === "all" ? "on" : ""}">Tất cả ${all.length}</button><button data-a="jTag" data-v="star" class="${ui.jTag === "star" ? "on" : ""}">★ Quan trọng ${all.filter(l => l.star).length}</button>${LTAGS.filter(t => cnt(t[0])).map(t => `<button data-a="jTag" data-v="${t[0]}" class="${ui.jTag === t[0] ? "on" : ""}">${t[1]} ${t[0]} ${cnt(t[0])}</button>`).join("")}</div>`;
+  return h + `<div class="card"><h3 class="serif">Kho bài học của tôi</h3><div id="lesson-list">${lessonListHTML()}</div></div>`;
+}
+function lessonForm(l) {
+  ui.edit = {type:"lesson", id:l ? l.id : null};
+  const day = l ? l.day : sod(ui.jDate);
+  openSheet(`${sheetHead(l ? "Sửa bài học" : "Thêm bài học", "saveLesson")}
+    <div class="field"><label>Bài học rút ra</label><textarea id="f-ltext" rows="4" placeholder="VD: Không quyết định chi tiêu lớn khi đang cảm xúc">${esc(l ? l.text : "")}</textarea></div>
+    <div class="row" style="gap:10px;align-items:stretch"><div class="field" style="flex:1"><label>Chủ đề</label><select id="f-ltag">${LTAGS.map(t => `<option value="${t[0]}" ${l && l.tag === t[0] ? "selected" : ""}>${t[1]} ${t[0]}</option>`).join("")}</select></div>
+    <div class="field" style="flex:1"><label>Ngày</label><input type="date" id="f-lday" value="${isoDate(day)}"></div></div>
+    <div class="field"><label>Mức độ</label><select id="f-lstar"><option value="0">Bình thường</option><option value="1" ${l && l.star ? "selected" : ""}>★ Quan trọng (ưu tiên ôn lại)</option></select></div>
+    ${l ? `<button class="btn danger" data-a="delLesson" data-id="${l.id}">Xóa bài học</button>` : ""}`);
+  if (!l) setTimeout(() => $("#f-ltext")?.focus(), 250);
+}
+function journalField(field, value) {
+  const d = sod(ui.jDate); let j = jOf(d);
+  if (!j) { j = {id:uid(), day:d, mood:0, text:"", grateful:""}; db.journals.push(j); }
+  j[field] = value; j.updated = Date.now();
+  if (!j.mood && !(j.text || "").trim() && !(j.grateful || "").trim()) db.journals = db.journals.filter(x => x !== j);
+  save();
+}
+
+// ================== Bảng nhập liệu (sheet) ==================
+function openSheet(html) { $("#sheet").innerHTML = html; $("#sheet-wrap").classList.add("show"); $("#sheet").scrollTop = 0; }
+function closeSheet() { $("#sheet-wrap").classList.remove("show"); ui.edit = null; }
+const sheetHead = (t, act) => `<div class="sheet-h"><button data-a="closeSheet" style="text-align:left">${act ? "Hủy" : "Đóng"}</button><b>${t}</b>${act ? `<button data-a="${act}" style="font-weight:800;text-align:right">Lưu</button>` : `<span style="min-width:56px"></span>`}</div>`;
+
+function taskForm(t, hour) {
+  const defHour = same(ui.date, Date.now()) ? Math.min(new Date().getHours() + 1, 23) : 8;
+  const base = t ? t.start : sod(ui.date) + (hour ?? defHour) * 3600000;
+  const end = t ? t.end : base + 3600000;
+  const before = t ? (t.remind ? t.before : -1) : 10;
+  ui.edit = {type:"task", id:t ? t.id : null};
+  openSheet(`${sheetHead(t ? "Sửa công việc" : "Thêm công việc", "saveTask")}
+    <div class="field"><label>Công việc</label><input id="f-title" value="${esc(t ? t.title : "")}" placeholder="VD: Tập thể dục 30 phút"></div>
+    <div class="field"><label>Ghi chú</label><textarea id="f-note" rows="2" placeholder="Không bắt buộc">${esc(t ? t.note : "")}</textarea></div>
+    ${t ? `<div class="field"><label>Lý do chưa xong</label><textarea id="f-reason" rows="2" placeholder="VD: Bận việc đột xuất, quên, thiếu thời gian…">${esc(t.reason || "")}</textarea></div>` : ""}
+    <div class="field"><label>Ngày</label><input type="date" id="f-day" value="${isoDate(base)}"></div>
+    <div class="row" style="gap:10px;align-items:stretch"><div class="field" style="flex:1"><label>Bắt đầu</label><input type="time" id="f-start" value="${hm(base)}"></div><div class="field" style="flex:1"><label>Kết thúc</label><input type="time" id="f-end" value="${hm(end)}"></div></div>
+    <div class="field"><label>Nhắc trước khi bắt đầu</label><select id="f-before">${[[-1,"Không nhắc"],[0,"Đúng giờ"],[5,"5 phút"],[10,"10 phút"],[15,"15 phút"],[30,"30 phút"],[60,"1 giờ"]].map(([v, l]) => `<option value="${v}" ${before === v ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+    ${t ? "" : `<div class="field"><label>Lặp lại</label><select id="f-rep"><option value="none">Không lặp</option><option value="daily">Hằng ngày</option><option value="weekdays">Thứ 2 – Thứ 6</option><option value="weekly">Hằng tuần</option></select></div>
+    <div class="field"><label>Lặp đến ngày (nếu có lặp)</label><input type="date" id="f-until" value="${isoDate(addD(base, 30))}"></div>`}
+    <p class="muted small">Hết giờ mà chưa đánh dấu hoàn thành, app sẽ nhắc "Chưa hoàn thành". 21:00 có tổng kết ngày.</p>
+    ${t ? `<button class="btn ${t.done ? "" : "pri"}" data-a="toggleTask" data-id="${t.id}" data-close="1">${t.done ? "Đánh dấu chưa xong" : "✓ Đánh dấu hoàn thành"}</button><button class="btn danger" data-a="delTask" data-id="${t.id}">Xóa công việc</button>` : ""}`);
+  if (!t) setTimeout(() => $("#f-title")?.focus(), 250);
+}
+
+function goalForm(g, y, m) {
+  ui.edit = {type:"goal", id:g ? g.id : null};
+  if (g) { y = g.year; m = g.month; }
+  openSheet(`${sheetHead(g ? "Sửa mục tiêu" : "Thêm mục tiêu", "saveGoal")}
+    <div class="field"><label>Mục tiêu</label><input id="f-title" value="${esc(g ? g.title : "")}" placeholder="VD: Đọc 24 cuốn sách"></div>
+    <div class="field"><label>Ghi chú / cách đo lường</label><textarea id="f-note" rows="3">${esc(g ? g.note : "")}</textarea></div>
+    <div class="row" style="gap:10px;align-items:stretch"><div class="field" style="flex:1"><label>Năm</label><input id="f-year" type="number" inputmode="numeric" value="${y}"></div>
+    <div class="field" style="flex:1"><label>Áp dụng cho</label><select id="f-month"><option value="0">Cả năm</option>${Array.from({length:12}, (_, i) => `<option value="${i + 1}" ${m === i + 1 ? "selected" : ""}>Tháng ${i + 1}</option>`).join("")}</select></div></div>
+    ${g ? `<button class="btn danger" data-a="delGoal" data-id="${g.id}">Xóa mục tiêu</button>` : ""}`);
+  if (!g) setTimeout(() => $("#f-title")?.focus(), 250);
+}
+
+function moneyForm(kind, x) {
+  const isE = kind === "exp", list = isE ? EXP : INC, P = isE ? ui.exP : ui.inP, A = isE ? ui.exA : ui.inA;
+  const now = Date.now(), def = x ? x.date : (P === "day" && !same(A, now) ? sod(A) + (now - sod(now)) : now);
+  ui.edit = {type:kind, id:x ? x.id : null, amount:x ? x.amount : 0, cat:x ? (isE ? x.cat : x.src) : list[0][0]};
+  const note = x ? (isE ? x.reason : x.note) : "";
+  openSheet(`${sheetHead(x ? (isE ? "Sửa khoản chi" : "Sửa khoản thu") : (isE ? "Thêm khoản chi" : "Thêm khoản thu"), "saveMoney")}
+    <div class="field"><label>Số tiền</label><div class="row"><input id="f-amt" class="money-input" inputmode="numeric" placeholder="0" value="${x ? fmtNum(x.amount) : ""}" style="color:${isE ? C.warn : C.done}"><b class="muted" style="font-size:22px">₫</b></div>
+    <div class="quick">${[10000, 50000, 100000, 200000, 500000, 1000000].map(v => `<button data-a="quick" data-v="${v}">+${short(v)}</button>`).join("")}<button data-a="quick" data-v="0" style="background:${C.line};color:var(--ink)">Xóa</button></div></div>
+    <div class="field"><label>${isE ? "Chi cho khoản nào" : "Nguồn thu (từ đâu)"}</label><div class="cats">${list.map(c => `<button data-a="selCat" data-v="${c[0]}" class="${c[0] === ui.edit.cat ? "on" : ""}"><span class="ic" style="background:${c[2]}2a">${c[1]}</span>${c[0]}</button>`).join("")}</div></div>
+    <div class="field"><label>${isE ? "Lý do chi" : "Ghi chú (từ ai, việc gì)"}</label><textarea id="f-note" rows="2" placeholder="${isE ? "VD: Ăn trưa với đồng nghiệp" : "VD: Lương tháng 11 công ty ABC"}">${esc(note)}</textarea></div>
+    <div class="field"><label>${isE ? "Thời gian chi" : "Nhận lúc"}</label><input type="datetime-local" id="f-date" value="${isoDT(def)}"></div>
+    ${x ? `<button class="btn danger" data-a="delMoney">Xóa khoản ${isE ? "chi" : "thu"}</button>` : ""}`);
+}
+
+function overdueSheet() {
+  const list = db.tasks.filter(isOverdue).sort((a, b) => b.start - a.start);
+  openSheet(`${sheetHead("Việc quá hạn", "")}${list.length ? list.map(t => `<div class="card"><b>${esc(t.title)}</b><div class="muted small" style="margin:4px 0 8px">${WD[dt(t.start).getDay()]}, ${dmy(t.start)} · ${hm(t.start)} – ${hm(t.end)}</div><textarea class="reason ${t.reason ? "" : "need"}" data-reason="${t.id}" rows="2" placeholder="Vì sao chưa xong?" style="margin-bottom:-4px">${esc(t.reason || "")}</textarea><div style="height:10px"></div><div class="row"><button class="mini" style="background:${C.done};color:#fff" data-a="toggleTask" data-id="${t.id}" data-refresh="overdue">✓ Đã xong</button><button class="mini" style="background:${C.accent}1f;color:${C.accent}" data-a="moveToday" data-id="${t.id}">↪ Dời sang hôm nay</button></div></div>`).join("") : `<p class="muted" style="text-align:center;padding:30px 0">Không còn việc quá hạn 🎉</p>`}`);
+}
+
+async function fillStorageInfo() {
+  const box = $("#st-info"); if (!box) return;
+  const str = JSON.stringify(db), kb = n => n < 1024 * 1024 ? (n / 1024).toFixed(0) + " KB" : (n / 1048576).toFixed(1) + " MB";
+  let used = "", quota = "";
+  try { const e = await navigator.storage.estimate(); used = kb(e.usage || 0); quota = e.quota ? kb(e.quota) : ""; } catch (e) {}
+  const zipped = canGz ? kb((await gz(str)).byteLength) : "";
+  box.innerHTML = `<div class="info"><span>Nơi lưu</span><b>${store.mode === "idb" ? "IndexedDB ✓" : store.mode === "local" ? "localStorage (dự phòng)" : "Bộ nhớ tạm ⚠️"}</b></div>
+    <div class="info"><span>Lưu trữ bền vững</span><b>${store.persisted ? "Đã bật ✓" : "Thêm app vào MH chính để bật"}</b></div>
+    <div class="info"><span>Trạng thái ghi</span><b style="color:${store.ok ? C.done : C.warn}">${store.ok ? "Bình thường ✓" : "Lỗi – hãy xuất file ngay"}</b></div>
+    <div class="info"><span>Dữ liệu của bạn</span><b>${kb(str.length * 1.05)}${zipped ? " (nén: " + zipped + ")" : ""}</b></div>
+    ${used ? `<div class="info"><span>App đang chiếm</span><b>${used}${quota ? " / " + quota + " cho phép" : ""}</b></div>` : ""}
+    <div class="info"><span>Số mục</span><b>${db.tasks.length} việc · ${db.goals.length} mục tiêu · ${db.expenses.length} chi · ${db.incomes.length} thu · ${db.journals.length} nhật ký · ${db.lessons.length} bài học</b></div>`;
+  const sl = $("#snap-list"); if (!sl) return;
+  if (store.mode !== "idb") { sl.textContent = "Không khả dụng trên trình duyệt này."; return; }
+  const ks = (await IDB.keys("snap")).map(String).sort().reverse();
+  sl.innerHTML = ks.length ? ks.map(k => `<button class="btn" style="text-align:left;font-size:13px;padding:10px 12px;margin-bottom:6px" data-a="restoreSnap" data-v="${esc(k)}">↺ ${esc(k)}</button>`).join("") : "Chưa có bản nào.";
+}
+function settingsSheet() {
+  const perm = "Notification" in window ? Notification.permission : "unsupported";
+  const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+  openSheet(`${sheetHead("Cài đặt", "")}
+    <div class="card"><h3 class="serif">Thông báo nhắc nhở</h3>
+    <p class="small muted" style="margin-top:0">${perm === "granted" ? "✅ Đã bật thông báo." : perm === "denied" ? "Thông báo đang bị chặn. Vào Cài đặt iPhone → Thông báo → Kế Hoạch để bật lại." : perm === "unsupported" ? (standalone ? "Thiết bị này chưa hỗ trợ thông báo web (cần iOS 16.4 trở lên)." : "Để nhận thông báo, hãy thêm app vào Màn hình chính trước (Safari → nút Chia sẻ → Thêm vào MH chính), rồi mở app từ icon.") : "Bấm nút dưới để cho phép app gửi nhắc nhở."}</p>
+    ${perm === "default" ? `<button class="btn pri" data-a="enableNotif">🔔 Bật thông báo</button>` : ""}
+    <p class="small muted" style="margin-bottom:0">Lưu ý: web app chỉ nhắc được khi app đang mở hoặc vừa mở lại. Lúc mở app, mọi nhắc nhở bị lỡ (việc quá hạn, tổng kết ngày) sẽ hiện ngay.</p></div>
+    <div class="card"><h3 class="serif">💾 Lưu trữ & dung lượng</h3><div id="st-info"><p class="muted small">Đang kiểm tra…</p></div></div>
+    <div class="card"><h3 class="serif">Sao lưu ra file</h3>
+    <p class="small muted" style="margin-top:0">Lưu file vào <b>Tệp → iCloud Drive</b> để không mất dữ liệu kể cả khi đổi/mất điện thoại. Nên làm mỗi tháng 1 lần.</p>
+    <button class="btn pri" data-a="exportData">⬇︎ Xuất file sao lưu</button>
+    <button class="btn" data-a="importData">⬆︎ Khôi phục từ file sao lưu</button>
+    <p class="small muted" style="margin:0">Lần xuất gần nhất: ${db.meta.lastExport ? dmy(db.meta.lastExport) : "chưa có"}</p></div>
+    <div class="card"><h3 class="serif">Bản sao lưu tự động</h3><p class="small muted" style="margin-top:0">App tự lưu 1 bản nén mỗi ngày, giữ ${SNAP_KEEP} bản gần nhất ngay trong máy. Chạm để khôi phục.</p><div id="snap-list" class="small muted">Đang tải…</div></div>`);
+}
+
+// ================== Hành động ==================
+function shift(k, n) {
+  if (k === "year") ui.date = addY(ui.date, n);
+  else if (k === "month") ui.date = addM(ui.date, n);
+  else if (k === "day") ui.date = addD(ui.date, n);
+  else if (k === "exp") ui.exA = shiftP(ui.exP, ui.exA, n);
+  else if (k === "inc") ui.inA = shiftP(ui.inP, ui.inA, n);
+  else if (k === "jday") ui.jDate = addD(ui.jDate, n);
+  render();
+}
+function clearNotified(id) { Object.keys(db.notified).forEach(k => { if (k.startsWith(id + ":")) delete db.notified[k]; }); }
+const findT = id => db.tasks.find(x => x.id === id);
+
+const actions = {
+  tab: v => { ui.tab = v; render(); window.scrollTo(0, 0); },
+  scope: v => { ui.scope = v; render(); },
+  today: () => { const n = Date.now(); if (ui.tab === "plan") { ui.date = n; ui.scope = "day"; } else if (ui.tab === "exp") ui.exA = n; else if (ui.tab === "inc") ui.inA = n; else ui.jDate = n; render(); },
+  prev: v => shift(v, -1),
+  next: v => shift(v, 1),
+  pickDay: v => { ui.date = +v; ui.scope = "day"; render(); window.scrollTo(0, 0); },
+  pickMonth: v => { ui.date = +v; ui.scope = "month"; render(); window.scrollTo(0, 0); },
+  period: (v, id, el) => { if (el.dataset.k === "exp") ui.exP = v; else ui.inP = v; render(); },
+  fab: () => {
+    if (ui.tab === "plan") { if (ui.scope === "day") taskForm(null); else goalForm(null, Y(ui.date), ui.scope === "month" ? M(ui.date) : 0); }
+    else if (ui.tab === "jour") { if (ui.jMode === "lessons") lessonForm(null); else { const t = $("[data-jf=text]"); if (t) { t.scrollIntoView({block:"center"}); t.focus(); } } }
+    else moneyForm(ui.tab, null);
+  },
+  addTask: v => taskForm(null, +v),
+  editTask: (v, id) => taskForm(findT(id)),
+  toggleTask: (v, id, el) => {
+    const t = findT(id); if (!t) return;
+    t.done = !t.done; t.doneAt = t.done ? Date.now() : null; save();
+    if (t.done) toast("🎉 Hoàn thành: " + t.title);
+    if (el.dataset.close) closeSheet();
+    if (el.dataset.refresh === "overdue") overdueSheet();
+    render();
+  },
+  delTask: (v, id) => { if (!confirm("Xóa công việc này?")) return; db.tasks = db.tasks.filter(x => x.id !== id); clearNotified(id); save(); closeSheet(); render(); },
+  saveTask: () => {
+    const title = $("#f-title").value.trim(); if (!title) return toast("Hãy nhập tên công việc", "warn");
+    const day = parseDate($("#f-day").value); if (day == null) return toast("Hãy chọn ngày", "warn");
+    const tm = v => { const [h, m] = (v || "0:0").split(":").map(Number); return (h || 0) * 3600000 + (m || 0) * 60000; };
+    const s = day + tm($("#f-start").value); let e = day + tm($("#f-end").value);
+    if (e === s) e = s + 3600000; else if (e < s) e = addD(e, 1);
+    const dur = e - s, before = +$("#f-before").value, note = $("#f-note").value.trim();
+    const fields = {title, note, remind: before >= 0, before: Math.max(before, 0)};
+    if (ui.edit.id) { const t = findT(ui.edit.id); Object.assign(t, fields, {start:s, end:e, reason:($("#f-reason")?.value || "").trim()}); clearNotified(t.id); }
+    else {
+      const rep = $("#f-rep").value; let days = [s];
+      if (rep !== "none") {
+        const lim = parseDate($("#f-until").value) ?? s, wd0 = dt(s).getDay(); days = []; let cur = s;
+        while (sod(cur) <= lim && days.length < 366) {
+          const wd = dt(cur).getDay();
+          if (rep === "daily" || (rep === "weekdays" && wd >= 1 && wd <= 5) || (rep === "weekly" && wd === wd0)) days.push(cur);
+          cur = addD(cur, 1);
+        }
+        if (!days.length) days = [s];
+      }
+      days.forEach(st => db.tasks.push({id:uid(), ...fields, start:st, end:st + dur, done:false, doneAt:null, created:Date.now()}));
+      if (days.length > 1) toast(`Đã thêm ${days.length} lần lặp lại`);
+    }
+    save(); closeSheet(); render();
+  },
+  addGoal: v => { const [y, m] = v.split("-").map(Number); goalForm(null, y, m); },
+  editGoal: (v, id) => goalForm(db.goals.find(g => g.id === id)),
+  toggleGoal: (v, id) => {
+    const g = db.goals.find(x => x.id === id); g.done = !g.done; g.doneAt = g.done ? Date.now() : null; save();
+    if (g.done) toast("🎯 Đã đạt mục tiêu: " + g.title);
+    render();
+  },
+  saveGoal: () => {
+    const title = $("#f-title").value.trim(); if (!title) return toast("Hãy nhập mục tiêu", "warn");
+    const f = {title, note:$("#f-note").value.trim(), year:+$("#f-year").value || Y(Date.now()), month:+$("#f-month").value};
+    if (ui.edit.id) Object.assign(db.goals.find(g => g.id === ui.edit.id), f);
+    else db.goals.push({id:uid(), ...f, done:false, doneAt:null, created:Date.now()});
+    save(); closeSheet(); render();
+  },
+  delGoal: (v, id) => { if (!confirm("Xóa mục tiêu này?")) return; db.goals = db.goals.filter(g => g.id !== id); save(); closeSheet(); render(); },
+  editMoney: (v, id, el) => { const k = el.dataset.k; moneyForm(k, (k === "exp" ? db.expenses : db.incomes).find(x => x.id === id)); },
+  quick: v => { ui.edit.amount = +v ? Math.min(ui.edit.amount + +v, 9999999999999) : 0; $("#f-amt").value = ui.edit.amount ? fmtNum(ui.edit.amount) : ""; },
+  selCat: (v, id, el) => { ui.edit.cat = v; document.querySelectorAll(".cats button").forEach(b => b.classList.toggle("on", b === el)); },
+  saveMoney: () => {
+    const e = ui.edit; if (!(e.amount > 0)) return toast("Hãy nhập số tiền", "warn");
+    const date = parseDT($("#f-date").value) ?? Date.now(), note = $("#f-note").value.trim();
+    const isE = e.type === "exp", arr = isE ? db.expenses : db.incomes;
+    const f = isE ? {amount:e.amount, cat:e.cat, reason:note, date} : {amount:e.amount, src:e.cat, note, date};
+    if (e.id) Object.assign(arr.find(x => x.id === e.id), f); else arr.push({id:uid(), ...f});
+    save(); closeSheet(); render();
+    toast(isE ? "Đã ghi khoản chi " + money(e.amount) : "Đã ghi khoản thu " + money(e.amount));
+  },
+  delMoney: () => {
+    if (!confirm("Xóa khoản này?")) return;
+    const k = ui.edit.type === "exp" ? "expenses" : "incomes"; db[k] = db[k].filter(x => x.id !== ui.edit.id);
+    save(); closeSheet(); render();
+  },
+  dayView: v => { ui.dayView = v; try { localStorage.setItem("kehoach-dayview", v); } catch (e) {} render(); },
+  moveTask: (v, id) => {
+    const t = findT(id), dur = Math.max(t.end - t.start, 15 * 60000), now = Date.now();
+    let s;
+    if (sod(t.start) < sod(now)) { s = sod(now) + (t.start - sod(t.start)); if (s < now) { const d = new Date(now); d.setMinutes(0, 0, 0); s = d.getTime() + 3600000; } }
+    else s = addD(t.start, 1);
+    t.start = s; t.end = s + dur; clearNotified(t.id); save(); render();
+    toast("Đã dời sang " + (same(s, now) ? "hôm nay" : WD[dt(s).getDay()] + " " + pad(D(s)) + "/" + pad(M(s))) + " lúc " + hm(s));
+  },
+  jMode: v => { ui.jMode = v; render(); window.scrollTo(0, 0); },
+  pickJDay: v => { ui.jDate = +v; render(); window.scrollTo(0, 0); },
+  setMood: v => { const j = jOf(ui.jDate); journalField("mood", j && j.mood === +v ? 0 : +v); render(); },
+  addLesson: () => {
+    const text = $("#l-text").value.trim(); if (!text) return toast("Hãy viết bài học trước", "warn");
+    db.lessons.push({id:uid(), day:sod(ui.jDate), text, tag:$("#l-tag").value, star:false, created:Date.now()});
+    save(); render(); toast("💡 Đã lưu bài học");
+  },
+  starLesson: (v, id) => { const l = db.lessons.find(x => x.id === id); l.star = !l.star; save(); if (ui.jMode === "lessons" && $("#lesson-list")) { render(); } else render(); },
+  editLesson: (v, id) => lessonForm(db.lessons.find(x => x.id === id)),
+  saveLesson: () => {
+    const text = $("#f-ltext").value.trim(); if (!text) return toast("Hãy viết bài học", "warn");
+    const f = {text, tag:$("#f-ltag").value, day:parseDate($("#f-lday").value) ?? sod(Date.now()), star:$("#f-lstar").value === "1"};
+    if (ui.edit.id) Object.assign(db.lessons.find(x => x.id === ui.edit.id), f); else db.lessons.push({id:uid(), ...f, created:Date.now()});
+    save(); closeSheet(); render(); toast("💡 Đã lưu bài học");
+  },
+  delLesson: (v, id) => { if (!confirm("Xóa bài học này?")) return; db.lessons = db.lessons.filter(x => x.id !== id); save(); closeSheet(); render(); },
+  jTag: v => { ui.jTag = v; render(); },
+  nextReview: () => { const all = db.lessons; if (all.length > 1) { let n; do { n = all[Math.floor(Math.random() * all.length)].id; } while (n === ui.jPick); ui.jPick = n; } render(); },
+  restoreSnap: async v => {
+    const d = await readSnapshot(v); if (!d) return toast("Bản sao lưu này bị lỗi", "warn");
+    if (!confirm("Khôi phục dữ liệu về bản sao lưu " + v + "? Dữ liệu hiện tại sẽ được lưu thêm 1 bản trước khi thay.")) return;
+    await snapshot(isoDate(Date.now()) + "T" + hm(Date.now()) + " (trước khôi phục)");
+    db = d; await writeNow(); closeSheet(); render(); toast("Đã khôi phục dữ liệu");
+  },
+  showOverdue: () => overdueSheet(),
+  moveToday: (v, id) => {
+    const t = findT(id), dur = Math.max(t.end - t.start, 15 * 60000), now = Date.now();
+    let s = sod(now) + (t.start - sod(t.start));
+    if (s < now) { const d = new Date(now); d.setMinutes(0, 0, 0); s = d.getTime() + 3600000; }
+    t.start = s; t.end = s + dur; clearNotified(t.id); save(); overdueSheet(); render();
+    toast("Đã dời sang " + hm(s) + " hôm nay");
+  },
+  closeSheet: () => closeSheet(),
+  settings: () => { settingsSheet(); fillStorageInfo(); },
+  enableNotif: async () => {
+    try { const r = await Notification.requestPermission(); toast(r === "granted" ? "Đã bật thông báo 🔔" : "Chưa được cấp quyền thông báo", r === "granted" ? "" : "warn"); }
+    catch (e) { toast("Thiết bị chưa hỗ trợ thông báo", "warn"); }
+    settingsSheet(); fillStorageInfo();
+  },
+  exportData: async () => {
+    db.meta.lastExport = Date.now(); await writeNow();
+    const name = "kehoach-saoluu-" + isoDate(Date.now()) + ".json";
+    const blob = new Blob([JSON.stringify(db)], {type:"application/json"});
+    try {
+      const file = new File([blob], name, {type:"application/json"});
+      if (navigator.canShare && navigator.canShare({files:[file]})) { await navigator.share({files:[file], title:name}); return; }
+    } catch (e) { if (e.name === "AbortError") return; }
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  },
+  importData: () => $("#f-import").click(),
+};
+
+document.addEventListener("click", e => {
+  if (e.target.id === "sheet-wrap") return closeSheet();
+  const el = e.target.closest("[data-a]"); if (!el) return;
+  const fn = actions[el.dataset.a]; if (!fn) return;
+  e.preventDefault(); e.stopPropagation();
+  fn(el.dataset.v, el.dataset.id, el);
+});
+document.addEventListener("change", e => {
+  const id = e.target.dataset && e.target.dataset.reason;
+  if (id) { const t = findT(id); if (t) { t.reason = e.target.value.trim(); save(); e.target.classList.toggle("need", isOverdue(t) && !t.reason); if (t.reason) toast("Đã lưu lý do"); } }
+});
+document.addEventListener("input", e => {
+  if (e.target.dataset && e.target.dataset.jf) { journalField(e.target.dataset.jf, e.target.value); const sv = $("#saved-at"); if (sv) sv.textContent = "Đang lưu…"; return; }
+  if (e.target.id === "l-search") { ui.jQuery = e.target.value; const box = $("#lesson-list"); if (box) box.innerHTML = lessonListHTML(); return; }
+  if (e.target.id === "f-amt" && ui.edit) {
+    const v = +e.target.value.replace(/\D/g, "").slice(0, 13) || 0;
+    ui.edit.amount = v; e.target.value = v ? fmtNum(v) : "";
+  }
+});
+$("#f-import").addEventListener("change", async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (!data || typeof data !== "object" || !Array.isArray(data.tasks)) throw new Error("bad");
+    if (!confirm("Thay toàn bộ dữ liệu hiện tại bằng file sao lưu này?")) return;
+    await snapshot(isoDate(Date.now()) + "T" + hm(Date.now()) + " (trước khôi phục)");
+    db = normalize(data); compact(); await writeNow(); closeSheet(); render(); toast("Đã khôi phục dữ liệu");
+  } catch (err) { toast("File sao lưu không hợp lệ", "warn"); }
+  finally { e.target.value = ""; }
+});
+
+// ================== Toast & nhắc nhở ==================
+let toastTimer, toastQueue = [];
+function toast(msg, type) {
+  const el = $("#toast"); el.textContent = msg; el.className = "show " + (type || "");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.className = type || "", 2800);
+  if (navigator.vibrate) navigator.vibrate(25);
+}
+let swReg = null;
+async function notify(title, body, type) {
+  toastQueue.push([title + " — " + body, type]);
+  try {
+    if ("Notification" in window && Notification.permission === "granted" && swReg) await swReg.showNotification(title, {body, icon:"icon-192.png", badge:"icon-192.png", tag:title + body});
+  } catch (e) {}
+}
+setInterval(() => { const m = toastQueue.shift(); if (m) toast(m[0], m[1]); }, 3200);
+
+function checkReminders() {
+  const n = Date.now(); let changed = false;
+  db.tasks.forEach(t => {
+    if (t.done) return;
+    const k1 = t.id + ":start", k2 = t.id + ":due", k3 = t.id + ":due2";
+    if (t.remind && n >= t.start - t.before * 60000 && n < t.end && !db.notified[k1]) {
+      db.notified[k1] = 1; changed = true;
+      notify("⏰ " + t.title, (n < t.start ? `Còn ${Math.ceil((t.start - n) / 60000)} phút` : "Đến giờ rồi") + " · " + hm(t.start) + " – " + hm(t.end));
+    }
+    if (n >= t.end && n - t.end < 12 * 3600000 && !db.notified[k2]) {
+      db.notified[k2] = 1; changed = true;
+      notify("❗ Chưa hoàn thành", `“${t.title}” đã hết giờ. Xong thì đánh dấu hoàn thành, chưa xong thì ghi lại lý do nhé!`, "warn");
+    }
+    if (n >= t.end + 2 * 3600000 && n - t.end < 12 * 3600000 && !db.notified[k3]) {
+      db.notified[k3] = 1; changed = true;
+      notify("🔔 Nhắc lại", `Bạn vẫn chưa hoàn thành “${t.title}”.`, "warn");
+    }
+  });
+  const d = new Date(n), k = "sum:" + isoDate(n);
+  if (d.getHours() >= 21 && !db.notified[k]) {
+    const list = db.tasks.filter(t => same(t.start, n));
+    if (list.length) {
+      db.notified[k] = 1; changed = true;
+      const p = list.filter(t => !t.done).length;
+      notify("📋 Tổng kết ngày", p ? `Hôm nay còn ${p}/${list.length} việc chưa hoàn thành. Cố lên!` : `🎉 Tuyệt vời! Bạn đã hoàn thành tất cả ${list.length} việc hôm nay.`, p ? "warn" : "");
+    }
+  }
+  const kj = "jr:" + isoDate(n);
+  if (d.getHours() * 60 + d.getMinutes() >= 21 * 60 + 30 && !db.notified[kj] && !jOf(n) && !db.lessons.some(l => l.day === sod(n))) {
+    db.notified[kj] = 1; changed = true; notify("📔 Viết nhật ký", "Dành 5 phút ghi lại hôm nay và 1 bài học rút ra nhé.");
+  }
+  const km = "goals:" + Y(n) + "-" + M(n);
+  if (D(n) >= 25 && !db.notified[km]) {
+    const left = db.goals.filter(g => g.year === Y(n) && g.month === M(n) && !g.done).length;
+    if (left) { db.notified[km] = 1; changed = true; notify("🎯 Mục tiêu tháng " + M(n), `Còn ${left} mục tiêu tháng này chưa đạt. Tháng sắp hết rồi!`, "warn"); }
+  }
+  if (changed) {
+    // dọn khóa cũ
+    const ids = new Set(db.tasks.map(t => t.id));
+    Object.keys(db.notified).forEach(key => { const id = key.split(":")[0]; if (!["sum", "goals", "jr"].includes(id) && !ids.has(id)) delete db.notified[key]; });
+    save();
+    if (!$("#sheet-wrap").classList.contains("show")) render();
+  }
+}
+
+// ================== Khởi động ==================
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  navigator.serviceWorker.register("sw.js").then(r => swReg = r).catch(() => {});
+}
+$("#app").innerHTML = '<p style="text-align:center;margin-top:40vh;color:#8f8a80">Đang mở…</p>';
+loadDB().then(() => { render(); setTimeout(checkReminders, 800); setInterval(checkReminders, 20000); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { render(); checkReminders(); } });
+</script>
+</body>
+</html>
