@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cài đặt app Kế Hoạch</title>
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--paper:#f9f5ed;--ink:#29292e;--muted:#8f8a80;--line:#e6ded1;--accent:#547361;--warn:#d66654}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.5}
+main{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 28px) 20px 40px}
+.hero{text-align:center}.hero img{width:96px;height:96px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+h1{font-family:"New York",Georgia,serif;font-size:30px;margin:14px 0 4px}.sub{color:var(--muted);margin:0 0 22px}
+.btn{display:block;width:100%;text-align:center;border:0;border-radius:14px;padding:16px;font-size:18px;font-weight:700;background:var(--accent);color:#fff;text-decoration:none;cursor:pointer}
+.btn2{display:block;text-align:center;margin-top:10px;color:var(--accent);font-weight:600;font-size:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:20px}
+.card h2{font-size:17px;margin:0 0 10px}ol{margin:0;padding-left:22px}li{margin:6px 0}
+.note{font-size:13px;color:var(--muted)}.warn{color:var(--warn);font-weight:600}
+code{background:#f1ece3;padding:1px 6px;border-radius:6px;font-size:14px}
+#notios{display:none}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <img src="icon-180.png" alt="Kế Hoạch">
+    <h1>Kế Hoạch</h1>
+    <p class="sub">Kế hoạch · Chi tiêu · Thu nhập · Nhật ký</p>
+  </div>
+
+  <div id="notios" class="card"><p class="warn" style="margin:0">Trang này dành cho iPhone/iPad. Hãy mở bằng Safari trên iPhone.</p></div>
+
+  <button class="btn" id="install">📲 Cài đặt app</button>
+  <a class="btn2" href="kehoach.mobileconfig" download>Nút trên không chạy? Tải file cài đặt tại đây</a>
+
+  <div class="card">
+    <h2>Các bước cài (khoảng 1 phút)</h2>
+    <ol>
+      <li>Bấm <b>📲 Cài đặt app</b> ở trên → chọn <b>Cho phép</b>. iPhone báo <i>“Đã tải về hồ sơ”</i> → bấm <b>Đóng</b>.</li>
+      <li>Mở <b>Cài đặt</b> → bấm dòng <b>Đã tải về hồ sơ</b> ngay dưới tên bạn<br><span class="note">(hoặc Cài đặt chung → VPN &amp; Quản lý thiết bị → Kế Hoạch)</span>.</li>
+      <li>Bấm <b>Cài đặt</b> (góc phải trên) → nhập mật mã iPhone → <b>Cài đặt</b> → <b>Xong</b>.</li>
+      <li>Ra Màn hình chính, mở icon <b>Kế Hoạch</b>. Vào ⚙︎ → <b>Bật thông báo</b> nếu muốn nhận nhắc nhở.</li>
+    </ol>
+    <p class="note">Nếu bạn bấm “Tải file cài đặt tại đây”: mở app <b>Tệp</b> → <b>Tải về</b> → chạm vào <code>kehoach.mobileconfig</code>, rồi làm tiếp từ bước 2.</p>
+  </div>
+
+  <div class="card">
+    <h2>An toàn &amp; riêng tư</h2>
+    <ul class="note" style="padding-left:18px;margin:0">
+      <li>Hồ sơ <b>chỉ chứa icon và đường dẫn app</b>, không cấp quyền quản lý máy, không đọc dữ liệu của bạn.</li>
+      <li>iPhone sẽ ghi <i>“Chưa được xác minh”</i> vì hồ sơ tự tạo, không ký bằng chứng chỉ trả phí — đây là bình thường.</li>
+      <li>Dữ liệu (kế hoạch, chi tiêu, nhật ký…) chỉ lưu trong iPhone của bạn. App chạy được cả khi không có mạng.</li>
+      <li>Gỡ app: Cài đặt → Cài đặt chung → VPN &amp; Quản lý thiết bị → Kế Hoạch → Xóa hồ sơ.</li>
+    </ul>
+  </div>
+</main>
+<script>
+const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+if (!ios) document.getElementById("notios").style.display = "block";
+document.getElementById("install").addEventListener("click", async () => {
+  try {
+    const buf = await (await fetch("kehoach.mobileconfig", {cache: "no-store"})).arrayBuffer();
+    let bin = ""; new Uint8Array(buf).forEach(b => bin += String.fromCharCode(b));
+    location.href = "data:application/x-apple-aspen-config;base64," + btoa(bin);
+  } catch (e) {
+    location.href = "kehoach.mobileconfig";
+  }
+});
+</script>
+</body>
+</html>
